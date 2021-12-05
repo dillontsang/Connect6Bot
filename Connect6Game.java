@@ -60,9 +60,9 @@ public class Connect6Game {
     } while (true);
   }
   
-  public void doMinimaxMove(int player) {
+  public void doMinimaxMove(int player, int turnNumber) {
 	  Move minimaxMove = new Move();
-	  minimaxMove = minimax.minimax(board, player, 3);
+	  minimaxMove = minimax.minimax(board, player, 3, turnNumber);
 	  board.applyMove(minimaxMove);
 	  board.setLastTop(minimaxMove.getRow());
       board.setLastCol(minimaxMove.getCol());

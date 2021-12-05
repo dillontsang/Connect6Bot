@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.HashSet;
 
 public class Board {
 	// dimensions for board
@@ -133,18 +134,143 @@ public class Board {
 	    return sb.toString();
 	  }
 	  
-	  public Move[] allAvailableMoves() {
-		  Move availableMoves[] = new Move[height * width];
-		  int a = 0;
+	  public HashSet<Move> allRelevantMoves() {
+		  HashSet<Move> relevantMoves = new HashSet<Move>();
+		  HashSet<Move> availableMoves = this.allAvailableMoves();
+		  int average = 0;	  
+		  int neighbors = 0;
+		  for(Move m: availableMoves) {
+			  	neighbors = 0;
+		  		if(m.getCol() == 0 && m.getRow() == 0) {
+		  			for(int i = 0; i <= 1; i++) {
+					  	for(int a = 0; a <= 1; a++) {
+					  		if(grid[m.getRow()+ a][m.getCol() + i] == '0' || grid[m.getRow() + a][m.getCol() + i] == '1') {
+						  		neighbors++;
+			  				}	
+			  			}
+			  		}
+		  			
+			  	} else if (m.getCol() == 0 && m.getRow() == height - 1) {
+			  		for(int i = 0; i <= 1; i++) {
+					  	for(int a = -1; a <= 0; a++) {
+					  		if(grid[m.getRow()+ a][m.getCol() + i] == '0' || grid[m.getRow() + a][m.getCol() + i] == '1') {
+						  		neighbors++;
+			  				}	
+			  			}
+			  		}
+			  		
+			  	} else if (m.getCol() == width - 1 && m.getRow() == 0) {
+			  		for(int i = -1; i <= 0; i++) {
+					  	for(int a = 0; a <= 1; a++) {
+					  		if(grid[m.getRow()+ a][m.getCol() + i] == '0' || grid[m.getRow() + a][m.getCol() + i] == '1') {
+						  		neighbors++;
+			  				}	
+			  			}
+			  		}
+			  		
+			  	} else if (m.getCol() == width - 1 && m.getRow() == height - 1) {
+			  		for(int i = -1; i <= 0; i++) {
+					  	for(int a = -1; a <= 0; a++) {
+					  		if(grid[m.getRow()+ a][m.getCol() + i] == '0' || grid[m.getRow() + a][m.getCol() + i] == '1') {
+						  		neighbors++;
+			  				}	
+			  			}
+			  		}
+			  		
+			  	} else if(m.getCol() == 0) {
+			  		for(int i = 0; i <= 1; i++) {
+					  	for(int a = -1; a <= 1; a++) {
+					  		if(grid[m.getRow()+ a][m.getCol() + i] == '0' || grid[m.getRow() + a][m.getCol() + i] == '1') {
+						  		neighbors++;
+			  				}	
+			  			}
+			  		}
+			  		
+			  	} else if(m.getCol() == width - 1) {
+			  		for(int i = -1; i <= 0; i++) {
+					  	for(int a = -1; a <= 1; a++) {
+					  		if(grid[m.getRow()+ a][m.getCol() + i] == '0' || grid[m.getRow() + a][m.getCol() + i] == '1') {
+						  		neighbors++;
+			  				}	
+			  			}
+			  		}
+			  		
+			  	} else if(m.getRow() == 0) {
+			  		for(int i = -1; i <= 1; i++) {
+					  	for(int a = 0; a <= 1; a++) {
+					  		if(grid[m.getRow()+ a][m.getCol() + i] == '0' || grid[m.getRow() + a][m.getCol() + i] == '1') {
+						  		neighbors++;
+			  				}	
+			  			}
+			  		}
+			  		
+			  	} else if(m.getRow() == height - 1) {
+			  		for(int i = -1; i <= 1; i++) {
+					  	for(int a = -1; a <= 0; a++) {
+					  		if(grid[m.getRow()+ a][m.getCol() + i] == '0' || grid[m.getRow() + a][m.getCol() + i] == '1') {
+						  		neighbors++;
+			  				}	
+			  			}
+			  		}
+			  		
+			  	} else {
+			  		for(int i = -1; i <= 1; i++) {
+					  	for(int a = -1; a <= 1; a++) {
+					  		if(grid[m.getRow()+ a][m.getCol() + i] == '0' || grid[m.getRow() + a][m.getCol() + i] == '1') {
+						  		neighbors++;
+			  				}	
+			  			}
+			  		}
+			  		
+			  	}
+		  		
+		  		m.setNeighbors(neighbors);
+		  		average += neighbors;
+		  }
+		  
+		  average /= availableMoves.size();
+		  
+		  for(Move m: availableMoves) {
+			  if(m.getNeighbors() > average) {
+				  relevantMoves.add(m);
+			  }
+		  }
+		  return relevantMoves;
+	  }
+	  
+	  public HashSet<Move> allAvailableMoves() {
+		  HashSet<Move> availableMoves = new HashSet<Move>();
+		  Move tempMove = new Move();
 		  for(int i = 0; i < width; i++) {
 		      for(int j = 0; j < height; j++)
 		      {
 		          if(grid[i][j] == '.') {
-		        	  availableMoves[a] = new Move(j, i);
-		        	  a++;
+		        	  tempMove = new Move(j, i);
+		        	  availableMoves.add(tempMove);
 		          }
 		      }
 		  }
 		  return availableMoves;
+	  }
+	  
+	  public HashSet<Move> movesMade(int player) {
+		  char sym;
+		  if(player == 0) {
+				sym = (char)48;
+		  } else {
+				sym = (char)49;
+		  }	
+		  HashSet<Move> movesMade = new HashSet<Move>();
+		  Move tempMove = new Move();
+		  for(int i = 0; i < width; i++) {
+		      for(int j = 0; j < height; j++)
+		      {
+		          if(grid[i][j] == sym) {
+		        	  tempMove = new Move(j, i);
+		        	  movesMade.add(tempMove);
+		          }
+		      }
+		  }
+		  return movesMade;
 	  }
 }

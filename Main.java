@@ -32,7 +32,7 @@ public class Main {
     		  }
     	  } else if (player == 1) {
     		  for(int i = 0; i < 2; i++) {
-    			  connect6game.doMinimaxMove(player);
+    			  connect6game.doMinimaxMove(player, i);
     			  
     			  connect6game.displayBoard();
     			  
