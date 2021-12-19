@@ -3,6 +3,7 @@ public class Move {
 	private int col;
 	private int row;
 	private int player;
+	private int neighbors;
 	
 	public Move() {
 		col = 0;
@@ -33,6 +34,10 @@ public class Move {
 		player = p;
 	}
 	
+	public void setNeighbors(int n) {
+		neighbors = n;
+	}
+	
 	public int getCol() {
 		return col;
 	}
@@ -43,6 +48,10 @@ public class Move {
 	
 	public int getPlayer() {
 		return player;
+	}
+	
+	public int getNeighbors() {
+		return neighbors;
 	}
 	
 }
