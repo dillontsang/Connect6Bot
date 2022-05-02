@@ -2,8 +2,8 @@ import java.util.Scanner;
 
 public class Connect6Game {
 
-  private Board board = new Board(6, 6);
-  private MiniMax minimax = new MiniMax();
+  private Board board = new Board(9, 9);
+  private MiniMax minimax = new MiniMax(new BoardNN(board));
   // getter and setter methods
   
   public void displayBoard() {
@@ -18,14 +18,16 @@ public class Connect6Game {
   // check if last play is a winning play
   public boolean isWinningPlay() {
     char sym = board.getLastMove();
+    int lastRow = board.getLastRow();
+    int lastCol = board.getLastCol();
     // winning streak with the last play symbol
     String streak = String.format("%c%c%c%c%c%c", sym, sym, sym, sym, sym, sym);
 
     // check if streak is in row, col, diagonal or backslash diagonal
-    return contains(board.horizontal(), streak) || 
-           contains(board.vertical(), streak) || 
-           contains(board.slashDiagonal(), streak) || 
-           contains(board.backslashDiagonal(), streak);
+    return contains(board.horizontal(lastRow), streak) || 
+           contains(board.vertical(lastCol), streak) || 
+           contains(board.slashDiagonal(lastCol, lastRow), streak) || 
+           contains(board.backslashDiagonal(lastCol, lastRow), streak);
   }
 
   // prompt user for column
@@ -50,7 +52,7 @@ public class Connect6Game {
       
       if(board.getMove(move.getRow(), move.getCol()) == '.') {
       	board.applyMove(move);
-      	board.setLastTop(move.getRow());
+      	board.setLastRow(move.getRow());
       	board.setLastCol(move.getCol());
       	return;
       }
@@ -60,11 +62,19 @@ public class Connect6Game {
     } while (true);
   }
   
-  public void doMinimaxMove(int player) {
+  public void doMinimaxMove(int player, int turnNumber) {
 	  Move minimaxMove = new Move();
-	  minimaxMove = minimax.minimax(board, player, 3);
+	  minimaxMove = minimax.minimax(board, player, 1, turnNumber);
 	  board.applyMove(minimaxMove);
-	  board.setLastTop(minimaxMove.getRow());
+	  board.setLastRow(minimaxMove.getRow());
       board.setLastCol(minimaxMove.getCol());
+  }
+  
+  public void applyFirstMove(int player) {
+	  int middle = (board.getHeight()-1) / 2;
+	  Move move = new Move(middle, middle, player);
+	  board.applyMove(move);
+	  board.setLastRow(middle);
+      board.setLastCol(middle);
   }
 }
