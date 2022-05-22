@@ -23,7 +23,7 @@ public class Main {
     	  if(player == 0) {
     		  for(int i = 0; i < 2; i++) {
     			  System.out.println("\nPlayer " + player + " turn: ");
-    			  connect6game.doMinimaxMove(player, i);
+    			  /*connect6game.doMinimaxMove(player, i);
     			  
     			  connect6game.displayBoard();
     			  System.out.println();
@@ -31,18 +31,18 @@ public class Main {
     			  if (connect6game.isWinningPlay()) {
     				  System.out.println("\nPlayer " + player + " wins!");
     		  		  return;
-    			  }
+    			  } */
     			  
     			    
     			  // ask user to choose column
-    			  /* connect6game.chooseMove(player, input);
+    			  connect6game.chooseMove(player, input);
     			  // display the board
     			  connect6game.displayBoard();
     			  // check if player won  
     			  if (connect6game.isWinningPlay()) {
     				  System.out.println("\nPlayer " + player + " wins!");
     		  		  return;
-    			  } */
+    			  }
     		 }
 					
     	  } else if (player == 1) {

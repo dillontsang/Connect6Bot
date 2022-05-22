@@ -1,5 +1,6 @@
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,12 +10,31 @@ public class Weights {
 	private Map<Node,Map<Node,Integer>> _weightMap;
 
 	
-	public void write (OutputStream os) {
-		
+	public void writeWeights (DataOutputStream os) throws IOException {
+		os.writeInt(_weights.length);
+		for (int i=0; i != _weights.length; i++) {
+			os.writeDouble(_weights[i]);
+		}
 	}
 	
-	public void read (InputStream os) {
+	public void readWeights (DataInputStream os, Network n) throws IOException {
+		int size = os.readInt();
+		_weights = new double [size];
+		for (int i =0 ; i != size; i++) {
+			_weights[i] = os.readDouble();
+		}
+	}
+	
+	public Weights clone () {
+		Weights w = new Weights();
+		w._weights = new double[_weights.length];
+		for (int i = 0 ; i != _weights.length; i++) {
+			w._weights[i] = _weights[i];
+		}
 		
+		w._weightMap = _weightMap; 
+		
+		return w;
 	}
 	
 	public double get(Node upstreamNode, Node downstreamNode) {
@@ -41,7 +61,11 @@ public class Weights {
 			}
 		}
 		_weights = new double [totalSize];
-		for(int i = 0; i < totalSize; i++) {
+		randomize(max);
+	}
+	
+	public void randomize(double max) {
+		for(int i = 0; i < _weights.length; i++) {
 			_weights[i] = 2.0 * Math.random() * max - max;
 		}
 	}

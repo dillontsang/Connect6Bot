@@ -22,6 +22,17 @@ public class Network {
 		}
 	}
 	
+	public Network createAdversary () {
+		Network retval = new Network();
+		retval._nodes = _nodes;
+		retval._weights = _weights.clone();
+		return retval;
+	}
+	
+	public List<Node> getNodes () {
+		return _nodes;
+	}
+	
 	public void buildNodeList (Node root) {
 		List<Node> _activeQueue = new LinkedList<Node> ();
 	    Set<Node> _coveredNodes = new HashSet<Node> ();

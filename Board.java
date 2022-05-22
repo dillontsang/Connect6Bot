@@ -263,7 +263,7 @@ public class Board {
 		      for(int j = 0; j < height; j++)
 		      {
 		          if(grid[i][j] == '.') {
-		        	  tempMove = new Move(j, i);
+		        	  tempMove = new Move(i, j);
 		        	  availableMoves.add(tempMove);
 		          }
 		      }
