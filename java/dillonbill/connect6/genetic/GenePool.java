@@ -1,3 +1,5 @@
+package dillonbill.connect6.genetic;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
@@ -6,6 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import dillonbill.connect6.net.Network;
+import dillonbill.connect6.net.Weights;
 
 public class GenePool {
 	private List<Weights> _weights;

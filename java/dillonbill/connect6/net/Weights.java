@@ -1,3 +1,5 @@
+package dillonbill.connect6.net;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -22,6 +24,32 @@ public class Weights {
 		_weights = new double [size];
 		for (int i =0 ; i != size; i++) {
 			_weights[i] = os.readDouble();
+		}
+	}
+
+	public void writeWeightMap (DataOutputStream os, Map<Node,Integer> nodeMap) throws IOException {
+		os.writeInt(_weightMap.keySet().size());
+		for(Node n: _weightMap.keySet()) {
+			os.writeInt(nodeMap.get(n));
+			Map<Node,Integer> curRow = _weightMap.get(n);
+			os.writeInt(curRow.keySet().size());
+			for(Node m: curRow.keySet()) {
+				os.writeInt(nodeMap.get(n));
+				os.writeInt(curRow.get(m));
+			}
+		}
+	}
+
+	public void readWeightMap (DataInputStream is, Map<Integer,Node> nodeMap) throws IOException {
+		int numNodes = is.readInt();
+		for (int i = 0; i != numNodes; i++) {
+			Node n = nodeMap.get(is.readInt());
+			_weightMap.put(n,new HashMap<Node,Integer>());
+			int numCols = is.readInt();
+			for (int j = 0; j != numCols; j++) {
+				Node m = nodeMap.get(is.readInt());
+				_weightMap.get(n).put(m,is.readInt());
+			}
 		}
 	}
 	

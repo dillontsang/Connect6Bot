@@ -1,3 +1,5 @@
+package dillonbill.connect6.net;
+
 import java.util.LinkedList;
 import java.util.List;
 

@@ -1,7 +1,18 @@
+package dillonbill.connect6.net;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
+import dillonbill.connect6.game.Board;
 
 
 public class Network {
@@ -12,6 +23,30 @@ public class Network {
 	
 	List<Node> _nodes;
 	Weights _weights;
+
+
+	public void writeNet(String filename) throws IOException {
+		DataOutputStream os = new DataOutputStream(new FileOutputStream(filename));
+		var nodeToInteger = new HashMap<Node,Integer>();
+		os.writeInt(_nodes.size());
+		for (int i = 0; i != _nodes.size(); i++) {
+			Node n = _nodes.get(i);
+			nodeToInteger.put(n,i);
+		    Node.writeNode(os, n, nodeToInteger);	
+		}
+	}
+
+	public void readNet(String filename, Board board) throws IOException {
+		DataInputStream is = new DataInputStream(new FileInputStream(filename));
+		var integerToNode = new HashMap<Integer,Node>();
+		int num = is.readInt();
+		_nodes = new ArrayList<>(num);
+		for (int i = 0; i != num; i++) {
+			Node n = Node.readNode(is, board, integerToNode);
+			integerToNode.put(i,n);
+			_nodes.set(i,n);
+		}
+	}
 	
 	public void evaluateNetwork() {
 		for(Node n: _nodes) {
@@ -69,11 +104,11 @@ public class Network {
 	    _weights.randomize(_nodes, 5.0);
 	}
 	
-	protected Weights getWeights() {
+	public Weights getWeights() {
 		return _weights;
 	}
 	
-	protected void setWeights(Weights weights) {
+	public void setWeights(Weights weights) {
 		_weights = weights;
 	}
 }

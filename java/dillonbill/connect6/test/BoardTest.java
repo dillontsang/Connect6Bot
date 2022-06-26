@@ -1,3 +1,7 @@
+package dillonbill.connect6.test;
+
+import dillonbill.connect6.game.Board;
+import dillonbill.connect6.game.Move;
 
 public class BoardTest extends Board{
 	public BoardTest(int h, int w) {

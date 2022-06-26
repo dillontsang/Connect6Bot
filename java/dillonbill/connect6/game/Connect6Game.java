@@ -1,3 +1,7 @@
+package dillonbill.connect6.game;
+
+
+import dillonbill.connect6.net.*;
 import java.util.Scanner;
 
 public class Connect6Game {
@@ -7,7 +11,6 @@ public class Connect6Game {
   // getter and setter methods
   
   
-  private Connect6Game() {}
   
   public Connect6Game (Board b, Network ai1, Network ai2) {
 	  board = b;

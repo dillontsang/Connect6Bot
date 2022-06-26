@@ -1,7 +1,10 @@
+package dillonbill.connect6.net;
+
+import dillonbill.connect6.game.*;
 
 public class BoardNN implements BoardAI {
 	Board _board;
-	Network _network;
+	public Network _network;
 	Node _outputNode;
 
 	public BoardNN(Board board) {

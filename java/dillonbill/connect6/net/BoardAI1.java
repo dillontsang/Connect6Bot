@@ -1,4 +1,9 @@
+package dillonbill.connect6.net;
+
 import java.util.Set;
+
+import dillonbill.connect6.game.Board;
+import dillonbill.connect6.game.Move;
 
 public class BoardAI1 implements BoardAI {
 	private int value;

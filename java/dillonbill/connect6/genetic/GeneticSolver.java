@@ -1,4 +1,10 @@
+package dillonbill.connect6.genetic;
 
+import java.io.IOException;
+
+import dillonbill.connect6.game.Board;
+import dillonbill.connect6.game.BotvBotGame;
+import dillonbill.connect6.net.Network;
 
 /*
  * 
@@ -28,14 +34,14 @@ public class GeneticSolver {
 		_genePool = new GenePool(count,net.getWeights());
 	}
 	
-	private int playGame (int sideA, int sideB) {
+	private int playGame (Board board, int sideA, int sideB) {
 		_netSideA.setWeights(_genePool.getWeights(sideA));
 		_netSideB.setWeights(_genePool.getWeights(sideB));
 		
 		//TODO:  make the game plug into here
 		//return side that wins, -1 on draw;
-		int retval = Game.playGame(_netSideA,_netSideB)==1?sideA:sideB;
-		Game.BOARD.reset();
+		int retval = BotvBotGame.playGame(board,_netSideA,_netSideB)==1?sideA:sideB;
+		board.reset();
 		return retval;
 	}
 	
@@ -48,12 +54,12 @@ public class GeneticSolver {
 		return (int) Math.floor(Math.random()*_genePool.numberOfGenes());
 	}
 	
-	private void determineRelativeFitness(int gamesToPlay) {
+	private void determineRelativeFitness(Board board, int gamesToPlay) {
 		for (int i=0; i != gamesToPlay; i++) {
 			int sideA = getRandomElement();
 			int sideB;
 			while (sideA == (sideB = getRandomElement()));
-			int winner = playGame(sideA,sideB);
+			int winner = playGame(board, sideA,sideB);
 			if (winner == sideA) {
 				_genePool.incrementScore(sideA);
 			} else {
@@ -62,11 +68,26 @@ public class GeneticSolver {
 		}
 	}
 	
-	public void optimize () {
-		while (true) {
-			determineRelativeFitness(100);  //TODO:  Another hyperparameter
-			evolveNextGeneration();
-			//write out nets
+	public void optimize (Board board, int skip, String experimentName) {
+		int j=0;
+		try {
+			_netSideA.writeNet(experimentName+".net");
+		} catch (IOException ioe) {
+			System.err.println(ioe);
+			System.exit(1);
 		}
+		while (true) {
+			determineRelativeFitness(board, 100);  //TODO:  Another hyperparameter
+			evolveNextGeneration();
+			j = j + 1;
+			if (j%skip == 0) {
+				System.out.println ("-----  Generation " + j);
+				_genePool.writeState(experimentName + "." + j);
+			}	
+		}
+	}
+
+	public void optimize (Board board, String experimentName) {
+		optimize(board,10,experimentName);
 	}
 }

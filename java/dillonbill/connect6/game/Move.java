@@ -1,3 +1,4 @@
+package dillonbill.connect6.game;
 
 public class Move {
 	private int col;

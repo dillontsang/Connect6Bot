@@ -1,3 +1,5 @@
+package dillonbill.connect6.game;
+
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -13,7 +15,7 @@ public class Board {
 	    reset(h, w);
 	}
 	
-	protected void reset(int h, int w) {
+	public void reset(int h, int w) {
 		width = w;
 	    height = h;
 	    grid = new char[h][w];

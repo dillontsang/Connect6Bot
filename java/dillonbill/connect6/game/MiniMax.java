@@ -1,5 +1,6 @@
+package dillonbill.connect6.game; 
 import java.util.HashSet;
-
+import dillonbill.connect6.net.*;
 public class MiniMax {
 	
 	private BoardAI _ai1,_ai2;
