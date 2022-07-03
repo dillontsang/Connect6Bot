@@ -46,6 +46,7 @@ public class Network {
 			integerToNode.put(i,n);
 			_nodes.set(i,n);
 		}
+		buildNodeList(_nodes.get(0));
 	}
 	
 	public void evaluateNetwork() {
