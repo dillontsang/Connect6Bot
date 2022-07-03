@@ -1,8 +1,10 @@
+package dillonbill.connect6.game;
 
 public class Move {
 	private int col;
 	private int row;
 	private int player;
+	private int neighbors;
 	
 	public Move() {
 		col = 0;
@@ -10,12 +12,12 @@ public class Move {
 		player = 0;
 	}
 	
-	public Move(int c, int r) {
+	public Move(int r, int c) {
 		col = c;
 		row = r;		
 	}
 	
-	public Move(int c, int r, int p) {
+	public Move(int r, int c, int p) {
 		col = c;
 		row = r;		
 		player = p;
@@ -33,6 +35,10 @@ public class Move {
 		player = p;
 	}
 	
+	public void setNeighbors(int n) {
+		neighbors = n;
+	}
+	
 	public int getCol() {
 		return col;
 	}
@@ -43,6 +49,10 @@ public class Move {
 	
 	public int getPlayer() {
 		return player;
+	}
+	
+	public int getNeighbors() {
+		return neighbors;
 	}
 	
 }
