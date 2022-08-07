@@ -155,10 +155,10 @@ public class GenePool {
 			_weights = new ArrayList<> (size);
 			_weightScores = new ArrayList<> (size);
 			for (int i = 0; i != size; i++) {
-				_weightScores.set(i,dos.readInt());
+				_weightScores.add(dos.readInt());
 				Weights w = new Weights ();
 				w.readWeights(dos, n);
-				_weights.set(i,w);
+				_weights.add(w);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

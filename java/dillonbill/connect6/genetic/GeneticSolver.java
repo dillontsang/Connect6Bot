@@ -1,10 +1,14 @@
 package dillonbill.connect6.genetic;
 
+import java.io.DataInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import dillonbill.connect6.game.Board;
 import dillonbill.connect6.game.BotvBotGame;
 import dillonbill.connect6.net.Network;
+import dillonbill.connect6.net.Weights;
 
 /*
  * 
@@ -34,6 +38,10 @@ public class GeneticSolver {
 		_genePool = new GenePool(count,net.getWeights());
 	}
 	
+	public Weights getWeights(int n) {
+		return _genePool.getWeights(n);
+	}
+	
 	private int playGame (Board board, int sideA, int sideB) {
 		_netSideA.setWeights(_genePool.getWeights(sideA));
 		_netSideB.setWeights(_genePool.getWeights(sideB));
@@ -54,8 +62,10 @@ public class GeneticSolver {
 		return (int) Math.floor(Math.random()*_genePool.numberOfGenes());
 	}
 	
+	
 	private void determineRelativeFitness(Board board, int gamesToPlay) {
 		for (int i=0; i != gamesToPlay; i++) {
+			if (i%100 == 0) System.out.println ("iteration " + i);
 			int sideA = getRandomElement();
 			int sideB;
 			while (sideA == (sideB = getRandomElement()));
@@ -76,9 +86,12 @@ public class GeneticSolver {
 			System.err.println(ioe);
 			System.exit(1);
 		}
+		System.out.println ("Beginning optimization");
 		while (true) {
-			determineRelativeFitness(board, 100);  //TODO:  Another hyperparameter
+			_genePool.resetScores();
+			determineRelativeFitness(board, 2000);  //TODO:  Another hyperparameter
 			evolveNextGeneration();
+			System.out.println ("Evolved generation " + j);
 			j = j + 1;
 			if (j%skip == 0) {
 				System.out.println ("-----  Generation " + j);
@@ -90,4 +103,8 @@ public class GeneticSolver {
 	public void optimize (Board board, String experimentName) {
 		optimize(board,10,experimentName);
 	}
+	
+	public void ReadTest1(String filename, Network n, int generation) {
+		_genePool.readState(filename + "." + generation, n);
+	}	
 }

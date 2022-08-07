@@ -22,6 +22,11 @@ public class Connect6Game {
 	  minimax = new MiniMax(new BoardNN(board));
   }
 
+  public Connect6Game (Board b, Network ai) {
+	  board = b;
+	  minimax = new MiniMax(new BoardNN(board,ai));
+  }
+
   
   public void displayBoard() {
 	  board.displayBoard();

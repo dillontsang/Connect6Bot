@@ -44,7 +44,7 @@ public class Network {
 		for (int i = 0; i != num; i++) {
 			Node n = Node.readNode(is, board, integerToNode);
 			integerToNode.put(i,n);
-			_nodes.set(i,n);
+			_nodes.add(n);
 		}
 		buildNodeList(_nodes.get(0));
 	}

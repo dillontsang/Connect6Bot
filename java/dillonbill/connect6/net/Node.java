@@ -35,7 +35,9 @@ public interface Node {
 	public List<Node> getUpstreamNodes();
 
 	public int getType();
-
+	
+	public void writeSpecific(DataOutputStream os) throws IOException;
+	
 	static Node readNode(DataInputStream is, Board board, Map<Integer,Node> nodeMap) throws IOException {
 		int t = is.readInt();
 		Node n = null;
@@ -50,13 +52,19 @@ public interface Node {
 		}
 		int toRead = is.readInt();
 		for (int i = 0 ; i != toRead; i++) {
-			n.addUpstreamNode(nodeMap.get(is.readInt()));
+			int upstreamID = is.readInt();
+			if(nodeMap.get(upstreamID) == null) {
+				throw new IOException();
+			}
+			n.addUpstreamNode(nodeMap.get(upstreamID));
 		}
 		return n;
 	}
 
 	static public void writeNode(DataOutputStream os, Node n, Map<Node,Integer> nodeMap) throws IOException {
 		os.writeInt(n.getType());
+		System.out.println("Hey there");
+		n.writeSpecific(os);
 		os.writeInt(n.getUpstreamNodes().size());
 		for (Node m: n.getUpstreamNodes()) {
 			os.writeInt(nodeMap.get(m));

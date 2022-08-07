@@ -1,5 +1,7 @@
 package dillonbill.connect6.net;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -48,6 +50,10 @@ public abstract class EvaluateNode implements Node {
 		_weights = weights;
 	}
 	
+	public void writeSpecific (DataOutputStream os) throws IOException {
+		
+	}
+	
 	public void addDownstreamNode(Node node) {
 		if(_downstream.contains(node)) {
 			return;
@@ -61,7 +67,14 @@ public abstract class EvaluateNode implements Node {
 		if(_upstream.contains(node)) {
 			return;
 		}
+		
 		_upstream.add(node);
+		 /* if(node.getDownstreamNodes().contains(this)) {
+			return;
+		}
+		node.addDownstreamNode(this); */
+		
+		//_upstream.add(node);
 		node.addDownstreamNode(this);
 	}
 	

@@ -11,7 +11,9 @@ public class SimpleOptimizer {
 	  Board board = new Board (9,9);
 	  // The network is constructed here...
 	  BoardNN boardnn = new BoardNN(board);
-	  var gs = new GeneticSolver (5,boardnn._network);
-	  gs.optimize(board,"FirstExperiment");
+	  var gs = new GeneticSolver (50,boardnn._network);
+	  gs.optimize(board,10,"\\Users\\dillo\\Code\\Connect6Bot\\data\\SecondNetwork\\data");
+	  
+	 
   }
 }

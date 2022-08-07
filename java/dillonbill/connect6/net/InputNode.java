@@ -1,6 +1,7 @@
 package dillonbill.connect6.net;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 
 import dillonbill.connect6.game.Board;
@@ -20,6 +21,12 @@ public class InputNode extends EvaluateNode {
 		_board = board;
 		_row = r;
 		_col = c;
+	}
+	
+	public void writeSpecific (DataOutputStream os) throws IOException {
+		os.writeInt(_row);
+		os.writeInt(_col);
+		System.out.println("Hey there");
 	}
 
 	@Override
