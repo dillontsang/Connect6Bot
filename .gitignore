@@ -1,3 +1,11 @@
 *.class
+*.swp
 .vscode*
-/bin/
+bin/
+.DS_Store/
+.classpath/
+.git/
+.project/
+java/build
+java/clean
+module-info.java
