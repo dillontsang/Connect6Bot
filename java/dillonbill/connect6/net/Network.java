@@ -37,17 +37,8 @@ public class Network {
 		    Node.writeNode(os, n, nodeToInteger);	
 		}
 	}
-
-	public void readNet(String filename, Board board) throws IOException {
-		DataInputStream is = new DataInputStream(new FileInputStream(filename));
-		var integerToNode = new HashMap<Integer,Node>();
-		int num = is.readInt();
-		_nodes = new ArrayList<>(num);
-		for (int i = 0; i != num; i++) {
-			Node n = Node.readNode(is, board, integerToNode);
-			integerToNode.put(i,n);
-			_nodes.add(n);
-		}
+	
+	public void buildWeightMap () {
 		var nodeMap = new HashMap<Node,Map<Node,Integer>> ();
 		int i = 0;
 		for (Node n: _nodes) {
@@ -62,7 +53,20 @@ public class Network {
 		}
 		_weights = new Weights();
 		_weights.setWeightMap(nodeMap);
-		_weightMap = nodeMap;
+		_weightMap = nodeMap;		
+	}
+
+	public void readNet(String filename, Board board) throws IOException {
+		DataInputStream is = new DataInputStream(new FileInputStream(filename));
+		var integerToNode = new HashMap<Integer,Node>();
+		int num = is.readInt();
+		_nodes = new ArrayList<>(num);
+		for (int i = 0; i != num; i++) {
+			Node n = Node.readNode(is, board, integerToNode);
+			integerToNode.put(i,n);
+			_nodes.add(n);
+		}
+		buildWeightMap();
 	}
 	
 	public void evaluateNetwork() {
@@ -78,6 +82,7 @@ public class Network {
 		Network retval = new Network();
 		retval._nodes = _nodes;
 		retval._weights = _weights.clone();
+		retval._weightMap = _weightMap;
 		return retval;
 	}
 	
@@ -117,7 +122,7 @@ public class Network {
 	        	}
 	        }
 	    }
-	    
+	    buildWeightMap();
 	    _weights.randomize(_nodes, 5.0);
 	}
 	

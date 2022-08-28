@@ -10,6 +10,7 @@ public class BotvBotGame {
 	     int height = board.getHeight(); 
 	     int width = board.getWidth();
 	     int moves = (height * width)/2;
+	     board.reset();
 
 	     Connect6Game connect6game = new Connect6Game(board,net1,net2);
 	     
@@ -47,6 +48,7 @@ public class BotvBotGame {
 	     int height = board.getHeight(); 
 	     int width = board.getWidth();
 	     int moves = (height * width)/2;
+	     board.reset();
 
 	     Connect6Game connect6game = new Connect6Game(board,net1,net2);
 	     
@@ -89,6 +91,7 @@ public class BotvBotGame {
      int height = board.getHeight(); 
      int width = board.getWidth();
      int moves = (height * width)/2;
+     board.reset();
 
      Connect6Game connect6game = new Connect6Game(board, net1);
      

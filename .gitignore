@@ -11,3 +11,4 @@ java/clean
 module-info.java
 java/.classpath
 java/.project
+data/

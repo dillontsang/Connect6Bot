@@ -15,14 +15,14 @@ public class ReadTest2{
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		
-		Board board = new Board (3,3);
+		Board board = new Board (9,9);
 		Network _network1 = new Network();
 		Network _network2 = new Network();
 		BoardNN boardnn = new BoardNN(board);
 		
 		int player0Gen = 10;
 		int player1Gen = 240;
-		int games = 100;
+		int games = 20;
 		int player0Wins = 0;
 		int player1Wins = 0;
 		int draws = 0;

@@ -61,18 +61,20 @@ public class GeneticSolver {
 	
 	
 	private void determineRelativeFitness(Board board, int gamesToPlay) {
-		for (int i=0; i != gamesToPlay; i++) {
-			if (i%100 == 0) System.out.println ("iteration " + i);
-			int sideA = getRandomElement();
-			int sideB;
-			while (sideA == (sideB = getRandomElement()));
-			int winner = playGame(board, sideA,sideB);
-			if (winner == sideA) {
-				_genePool.incrementScore(sideA);
-			} else {
-				_genePool.incrementScore(sideB);
+		for (int i=0; i != _genePool.numberOfGenes(); i++) {
+			for (int j=0; j != _genePool.numberOfGenes(); j++) {
+				if (i==j) continue;
+				int sideA = i;
+				int sideB = j;
+				int winner = playGame (board,sideA,sideB);
+				if (winner == sideA) {
+					_genePool.incrementScore(i);
+				} else {
+					_genePool.incrementScore(j);
+				}
 			}
 		}
+		
 	}
 	
 	public void optimize (Board board, int skip, String experimentName) {
