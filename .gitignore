@@ -9,3 +9,5 @@ bin/
 java/build
 java/clean
 module-info.java
+java/.classpath
+java/.project
