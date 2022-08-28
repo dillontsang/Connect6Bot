@@ -93,6 +93,6 @@ public abstract class EvaluateNode implements Node {
 	}
 	
 	public static double squash(double d) {
-		return Math.atan(d) + NEUTRAL;
+		return Math.atan(d);
 	}
 }

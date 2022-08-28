@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import dillonbill.connect6.game.Board;
@@ -23,6 +24,7 @@ public class Network {
 	
 	List<Node> _nodes;
 	Weights _weights;
+	Map<Node,Map<Node,Integer>> _weightMap;
 
 
 	public void writeNet(String filename) throws IOException {
@@ -46,7 +48,21 @@ public class Network {
 			integerToNode.put(i,n);
 			_nodes.add(n);
 		}
-		buildNodeList(_nodes.get(0));
+		var nodeMap = new HashMap<Node,Map<Node,Integer>> ();
+		int i = 0;
+		for (Node n: _nodes) {
+			var tmap = new HashMap<Node,Integer>();
+			nodeMap.put(n, tmap);
+			tmap.put(n, i);
+			i++;
+			for (Node m: n.getDownstreamNodes()) {
+				tmap.put(m, i);
+				i++;
+			}
+		}
+		_weights = new Weights();
+		_weights.setWeightMap(nodeMap);
+		_weightMap = nodeMap;
 	}
 	
 	public void evaluateNetwork() {
@@ -111,6 +127,10 @@ public class Network {
 	
 	public void setWeights(Weights weights) {
 		_weights = weights;
+		weights.setWeightMap(_weightMap);
+		for (Node n: _nodes) {
+			n.setWeights(weights);
+		}
 	}
 }
 

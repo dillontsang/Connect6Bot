@@ -1,9 +1,6 @@
 package dillonbill.connect6.genetic;
 
-import java.io.DataInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import dillonbill.connect6.game.Board;
 import dillonbill.connect6.game.BotvBotGame;

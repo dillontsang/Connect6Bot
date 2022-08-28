@@ -10,8 +10,8 @@ public class BoardNN implements BoardAI {
 	public BoardNN(Board board) {
 		// just something to play around with
 		Layer inputLayer = new Layer(0);
-		Layer h1Layer = new Layer(100);
-		Layer h2Layer = new Layer(100);
+		Layer h1Layer = new Layer(2);
+		Layer h2Layer = new Layer(2);
 		Layer outputLayer = new Layer(0);
 		// copy over from Network
 		_board = board;

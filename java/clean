@@ -1,0 +1,5 @@
+rm dillonbill/connect6/game/*.class
+rm dillonbill/connect6/genetic/*.class
+rm dillonbill/connect6/test/*.class
+rm dillonbill/connect6/net/*.class
+rm dillonbill/connect6/*.class

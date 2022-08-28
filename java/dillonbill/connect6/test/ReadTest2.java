@@ -15,7 +15,7 @@ public class ReadTest2{
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		
-		Board board = new Board (9,9);
+		Board board = new Board (3,3);
 		Network _network1 = new Network();
 		Network _network2 = new Network();
 		BoardNN boardnn = new BoardNN(board);
@@ -29,6 +29,7 @@ public class ReadTest2{
 		double player0PercentWins = 0;
 		double player1PercentWins = 0;
 		
+		
 		var gs1 = new GeneticSolver (50,boardnn._network);
 		var gs2 = new GeneticSolver (50,boardnn._network);
 		/* File csvFile = new File("\\Users\\dillo\\Code\\Connect6Bot\\data\\FirstExperiment\\FirstExperimentDataTest.csv");
@@ -38,12 +39,12 @@ public class ReadTest2{
 		for(int i = 100; i <= 2700; i += 100) { */
 			player1Gen = 10;
 			player1Wins = 0;
-			ReadTest1("\\Users\\dillo\\Code\\Connect6Bot\\data\\SecondNetwork\\data", _network1, board, gs1, player0Gen);
-			ReadTest1("\\Users\\dillo\\Code\\Connect6Bot\\data\\SecondNetwork\\data", _network2, board, gs2, player1Gen);
+			ReadTest1("/Users/williamcochran/Code/dillon/Connect6Bot/data/data", _network1, board, gs1, player0Gen);
+			ReadTest1("/Users/williamcochran/Code/dillon/Connect6Bot/data/data", _network2, board, gs2, player0Gen);
 		
 			for(int j = 0; j < games; j++) {
-				_network1.setWeights(gs1.getWeights((int)(Math.random() * 50)));
-				_network2.setWeights(gs2.getWeights((int)(Math.random() * 50)));
+				_network1.setWeights(gs1.getWeights(10));
+				_network2.setWeights(gs2.getWeights(10));
 				switch(BotvBotGame.playGame(board,_network1, _network2)) {
 					case 0:
 						draws++;

@@ -8,11 +8,11 @@ import dillonbill.connect6.net.*;
 
 public class SimpleOptimizer {
   public static void main(String[] args) {
-	  Board board = new Board (9,9);
+	  Board board = new Board (3,3);
 	  // The network is constructed here...
 	  BoardNN boardnn = new BoardNN(board);
 	  var gs = new GeneticSolver (50,boardnn._network);
-	  gs.optimize(board,10,"\\Users\\dillo\\Code\\Connect6Bot\\data\\SecondNetwork\\data");
+	  gs.optimize(board,10,"/Users/williamcochran/Code/dillon/Connect6Bot/data/another");
 	  
 	 
   }
