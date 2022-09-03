@@ -106,9 +106,13 @@ public class GenePool {
 	public void evolve () {
 		var newWeights = new ArrayList<Weights> (_weights.size());
 		for (int i = 0; i != _weights.size(); i++) {
-			int a = getPreferedGenes();
-			int b = getPreferedGenes();
-			newWeights.add(merge(a,b));
+			if (i < _weights.size()/3) {
+				newWeights.add(_weights.get(i));
+			} else {
+				int a = getPreferedGenes();
+				int b = getPreferedGenes();
+				newWeights.add(merge(a,b));
+			}
 		}
 		_weights = newWeights;
 		resetScores();

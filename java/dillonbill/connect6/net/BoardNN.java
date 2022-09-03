@@ -12,6 +12,7 @@ public class BoardNN implements BoardAI {
 		Layer inputLayer = new Layer(0);
 		Layer h1Layer = new Layer(20);
 		Layer h2Layer = new Layer(20);
+		Layer h3Layer = new Layer(40);
 		Layer outputLayer = new Layer(0);
 		// copy over from Network
 		_board = board;
@@ -24,8 +25,9 @@ public class BoardNN implements BoardAI {
 		outputLayer.addNode(_outputNode);
 		inputLayer.connectLayer(h1Layer);
 		inputLayer.connectLayer(h2Layer);
-		h1Layer.connectLayer(outputLayer);
-		h2Layer.connectLayer(outputLayer);
+		h1Layer.connectLayer(h3Layer);
+		h2Layer.connectLayer(h3Layer);
+		h3Layer.connectLayer(outputLayer);
 		_network = new Network();
 		_network.buildNodeList(_outputNode);
 	}

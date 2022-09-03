@@ -38,10 +38,6 @@ public interface Node {
 
 	public int getType();
 	
-	public void setBoard (Board b);
-	
-	public void clearConnections();
-	
 	public int getID();
 	
 	public void writeSpecific(DataOutputStream os) throws IOException;
@@ -71,7 +67,6 @@ public interface Node {
 
 	static public void writeNode(DataOutputStream os, Node n, Map<Node,Integer> nodeMap) throws IOException {
 		os.writeInt(n.getType());
-		System.out.println("Hey there");
 		n.writeSpecific(os);
 		os.writeInt(n.getUpstreamNodes().size());
 		for (Node m: n.getUpstreamNodes()) {

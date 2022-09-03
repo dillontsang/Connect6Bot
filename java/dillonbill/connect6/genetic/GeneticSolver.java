@@ -44,12 +44,6 @@ public class GeneticSolver {
 		Network _whiteNetThread;
 		
 		public void run () {
-			for (Node n: _blackNetThread.getNodes()) {
-				n.setBoard(_board);
-			}
-			for (Node n: _whiteNetThread.getNodes()) {
-				n.setBoard(_board);
-			}
 			for (int i=_start; i != _finish; i++) {
 				if (_printer) {
 					int num = 100 * (i-_start);
@@ -74,7 +68,6 @@ public class GeneticSolver {
 					}
 				}
 			}
-			System.out.println ("Thread ended");
 		}
 
 		private Result playGame (int black, int white, Network blackNet, Network whiteNet) {
@@ -144,7 +137,6 @@ public class GeneticSolver {
 				System.exit(1);
 			}
 		}
-		System.out.println ("Done");
 	}
 	
 	public void optimize (Board board, int skip, String experimentName) {

@@ -29,12 +29,12 @@ public class MiniMax {
 	}
 	
 	public Move minimax(Board board, Connect6Game.Stone player, int depth, int turnNumber, HashSet<Move> done) {
-		HashSet<Move> allAvailableMoves = board.allRelevantMoves();
-	    done = done == null ? new HashSet<>() : done;
-	    
 		if(depth == 0) {
 	    	return null;
 	    }
+
+		HashSet<Move> allAvailableMoves = board.allRelevantMoves();
+	    done = done == null ? new HashSet<>() : done;
 	    
 	    Move bestMove = new Move();
 	    Move nextMove = new Move();

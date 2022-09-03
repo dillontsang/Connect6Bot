@@ -37,7 +37,6 @@ public class InputNode extends EvaluateNode {
 	public void writeSpecific (DataOutputStream os) throws IOException {
 		os.writeInt(_row);
 		os.writeInt(_col);
-		System.out.println("Hey there");
 	}
 
 	@Override

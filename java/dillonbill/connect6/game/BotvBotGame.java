@@ -23,11 +23,6 @@ public class BotvBotGame {
 	     int moves = (height * width)/2;
 	     Result winner = Result.TIE;
 	     board.reset();
-
-	     blackAI.buildNodeList(blackAI.getOutputNode());
-	     whiteAI.buildNodeList(whiteAI.getOutputNode());
-		 blackAI.setWeights();
-		 whiteAI.setWeights();
 			
 
 	     Connect6Game connect6game = new Connect6Game(board,blackAI,whiteAI);
@@ -39,6 +34,10 @@ public class BotvBotGame {
 	     for (Stone player = Stone.WHITE; moves-- > 0; player = player.otherPlayer()) {
 	    	 if (print) {
 	    		 board.displayBoard();
+	    		 blackAI.evaluateNetwork();
+	    		 System.out.println ("Black evaluation: " + blackAI.getOutputNode().getValue());
+	    		 whiteAI.evaluateNetwork();
+	    		 System.out.println ("White evaluation: " + whiteAI.getOutputNode().getValue());
 	    	 }
 	    	 for(int i = 0; i < 2; i++) {
 	    		 connect6game.doMinimaxMove(player, i);

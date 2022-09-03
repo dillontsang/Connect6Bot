@@ -30,15 +30,7 @@ public abstract class EvaluateNode implements Node {
 		_weights.set(this, this, d);
 	}
 	
-	public void setBoard (Board b) {
-		
-	}
-	
 	protected void copyFrom (EvaluateNode input) {
-		_accumulator = input._accumulator;
-		_weights = input._weights;
-		_downstream = input._downstream;
-		_upstream = input._upstream;
 		_id = input._id;
 	}
 	

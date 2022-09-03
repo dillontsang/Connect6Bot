@@ -26,14 +26,13 @@ public class Network {
 	Weights _weights;
 	Map<Integer,Map<Integer,Integer>> _weightMap;
 	
-	public Network cloneForThreads (Board b) {
-		Board board = new Board (b);
+	public Network cloneForThreads (Board board) {
 		Network net = new Network ();
+		net._weightMap = _weightMap;
 		for (Node n: _nodes) {
 			net._nodes.add(n.cloneForThreads(board));
 		}
 		for (int i = 0 ; i != _nodes.size(); i++) {
-			net._nodes.get(i).clearConnections();
 			for (Node n: _nodes.get(i).getUpstreamNodes()) {
 				for (Node m: net._nodes) {
 					if (m.getID() == n.getID()) {
@@ -41,16 +40,8 @@ public class Network {
 					}
 				}
 			}
-			for (Node n: _nodes.get(i).getDownstreamNodes()) {
-				for (Node m: net._nodes) {
-					if (m.getID() == n.getID()) {
-						net._nodes.get(i).addDownstreamNode(m);
-					}
-				}
-			}
 		}
 		net._weights = _weights;
-		net._weightMap = _weightMap;
 		return net;
 	}
 
