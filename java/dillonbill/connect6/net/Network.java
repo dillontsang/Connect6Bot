@@ -24,7 +24,35 @@ public class Network {
 	
 	List<Node> _nodes;
 	Weights _weights;
-	Map<Node,Map<Node,Integer>> _weightMap;
+	Map<Integer,Map<Integer,Integer>> _weightMap;
+	
+	public Network cloneForThreads (Board b) {
+		Board board = new Board (b);
+		Network net = new Network ();
+		for (Node n: _nodes) {
+			net._nodes.add(n.cloneForThreads(board));
+		}
+		for (int i = 0 ; i != _nodes.size(); i++) {
+			net._nodes.get(i).clearConnections();
+			for (Node n: _nodes.get(i).getUpstreamNodes()) {
+				for (Node m: net._nodes) {
+					if (m.getID() == n.getID()) {
+						net._nodes.get(i).addUpstreamNode(m);
+					}
+				}
+			}
+			for (Node n: _nodes.get(i).getDownstreamNodes()) {
+				for (Node m: net._nodes) {
+					if (m.getID() == n.getID()) {
+						net._nodes.get(i).addDownstreamNode(m);
+					}
+				}
+			}
+		}
+		net._weights = _weights;
+		net._weightMap = _weightMap;
+		return net;
+	}
 
 
 	public void writeNet(String filename) throws IOException {
@@ -39,15 +67,15 @@ public class Network {
 	}
 	
 	public void buildWeightMap () {
-		var nodeMap = new HashMap<Node,Map<Node,Integer>> ();
+		var nodeMap = new HashMap<Integer,Map<Integer,Integer>> ();
 		int i = 0;
 		for (Node n: _nodes) {
-			var tmap = new HashMap<Node,Integer>();
-			nodeMap.put(n, tmap);
-			tmap.put(n, i);
+			var tmap = new HashMap<Integer,Integer>();
+			nodeMap.put(n.getID(), tmap);
+			tmap.put(n.getID(), i);
 			i++;
 			for (Node m: n.getDownstreamNodes()) {
-				tmap.put(m, i);
+				tmap.put(m.getID(), i);
 				i++;
 			}
 		}
@@ -97,6 +125,7 @@ public class Network {
 	public void buildNodeList (Node root) {
 		List<Node> _activeQueue = new LinkedList<Node> ();
 	    Set<Node> _coveredNodes = new HashSet<Node> ();
+	    _nodes = new LinkedList<> ();
 	    _weights = new Weights();
 	    _activeQueue.add(root);
 	    while (!_activeQueue.isEmpty()) {
@@ -107,7 +136,6 @@ public class Network {
 	        		if (!_coveredNodes.contains(n)) {
 	        			_activeQueue.add(0, n);
 	        			readyToProcess = false;
-	        			break;
 	        		}
 	        	}
 	        	if (readyToProcess) {
@@ -129,6 +157,11 @@ public class Network {
 	public Weights getWeights() {
 		return _weights;
 	}
+	
+	public void setWeights () {
+		setWeights(_weights);
+	}
+	
 	
 	public void setWeights(Weights weights) {
 		_weights = weights;

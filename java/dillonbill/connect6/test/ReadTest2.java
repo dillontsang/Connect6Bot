@@ -46,13 +46,13 @@ public class ReadTest2{
 				_network1.setWeights(gs1.getWeights(10));
 				_network2.setWeights(gs2.getWeights(10));
 				switch(BotvBotGame.playGame(board,_network1, _network2)) {
-					case 0:
+					case TIE:
 						draws++;
 						break;
-					case 1:
+					case BLACK:
 						player0Wins++;
 						break;
-					case 2:
+					case WHITE:
 						player1Wins++;
 						break;
 				}

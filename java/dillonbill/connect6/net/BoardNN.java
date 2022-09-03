@@ -10,8 +10,8 @@ public class BoardNN implements BoardAI {
 	public BoardNN(Board board) {
 		// just something to play around with
 		Layer inputLayer = new Layer(0);
-		Layer h1Layer = new Layer(50);
-		Layer h2Layer = new Layer(50);
+		Layer h1Layer = new Layer(20);
+		Layer h2Layer = new Layer(20);
 		Layer outputLayer = new Layer(0);
 		// copy over from Network
 		_board = board;
@@ -36,8 +36,8 @@ public class BoardNN implements BoardAI {
 		_outputNode = net.getOutputNode();
 	}
 
-	public int evaluate(Board b, int player) {
+	public int evaluate(Board b) {
 		_network.evaluateNetwork();
-		return (2 * player - 1) * (int) Math.round(_outputNode.getValue() * 10000);
+		return (int) Math.round(_outputNode.getValue() * 10000000);
 	}
 }

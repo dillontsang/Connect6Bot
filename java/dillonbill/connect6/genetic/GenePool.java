@@ -36,6 +36,43 @@ public class GenePool {
 		}
 	}
 	
+	public void showAngleStats() {
+		System.out.println ("Printing stats");
+		List<Double> lengths = new ArrayList<>(_weights.size());
+		List<Double> angles = new ArrayList<>(_weights.size()*_weights.size());
+		double mean_length = 0.0;
+		double mean_angle = 0.0;
+		for (Weights w: _weights) {
+			double cum = 0.0;
+			double len = 0.0;
+			for (double d: w.getWeights()) {
+				cum += d*d;
+			}
+			double leng = Math.pow(cum, 0.5);
+			lengths.add(leng);
+			mean_length += leng;
+		}
+		mean_length = mean_length / (double) lengths.size(); 
+		for (int i = 0; i != _weights.size(); i++) {
+			for (int j = 0; j != _weights.size(); j++) {
+				double angle=0.0;
+				for (int k = 0;k != _weights.get(i).getWeights().length;k++) {
+					for(int l = 0;l != _weights.get(j).getWeights().length;l++) {
+						angle += _weights.get(i).getWeights()[k]*_weights.get(j).getWeights()[l];
+					}
+				}
+				System.out.println ("--- " + i + "  " + j);
+				angle = angle / lengths.get(i) / lengths.get(j);
+				angles.add(angle);
+				mean_angle += angle;
+			}
+		}
+		mean_angle = mean_angle / (double)angles.size();
+		System.out.println ("Mean length: " + mean_length);
+		System.out.println ("Mean angle: " + mean_angle);
+		
+	}
+	
 	public void sortPool() {
 		sortedPool = new ArrayList<>(_weights.size());
 		_totalScore = 0;
@@ -56,7 +93,7 @@ public class GenePool {
 	}
 
 	public int getPreferedGenes () {
-		int randVal = (int)(Math.random()*_totalScore);
+		int randVal = (int)(Math.random()*(_totalScore/2));
 		for (int i = 0;i != _weights.size();i++) {
 			if (_weightScores.get(i) > randVal) {
 				return i;
@@ -72,8 +109,9 @@ public class GenePool {
 			int a = getPreferedGenes();
 			int b = getPreferedGenes();
 			newWeights.add(merge(a,b));
-			_weightScores.add(0);
 		}
+		_weights = newWeights;
+		resetScores();
 	}
 	
 	public int numberOfGenes() {
@@ -94,35 +132,36 @@ public class GenePool {
 		return _weightScores.get(i);
 	}
 	
-	public void incrementScore (int i) {
+	public synchronized void incrementScore (int i) {
 		_weightScores.set (i,1+_weightScores.get(i));
 	}
 	
-	public void decrementScore (int i) {
+	public synchronized void decrementScore (int i) {
 		_weightScores.set (i,_weightScores.get(i)-1);
 	}
 	
-	public Weights merge (int i, int j) {
-		Weights w = _weights.get(i).clone();
+	public Weights merge (int mom, int dad) {
+		Weights w = _weights.get(mom).clone();
 		
 		List<Integer> crossPoints = new ArrayList<> (NUMBER_OF_CROSSES);
 		for (int k=0; k != NUMBER_OF_CROSSES; k++) {
 			int val = (int) Math.floor(Math.random()*w.getWeights().length);
 			crossPoints.add(val);
 		}
+		crossPoints.add(w.getWeights().length);
 		Collections.sort(crossPoints);
-		int lastSpot = 0;
-		int side = i;
-		for (Integer curCross: crossPoints) {
-			for (int k=lastSpot; k != curCross; k++) {
-				w.getWeights()[k] = _weights.get(side).getWeights()[k];
+		int lastSpot = crossPoints.get(0);
+		int side = dad;
+		for (int k = 1; k != crossPoints.size(); k++) {
+			for (int l=lastSpot; l != crossPoints.get(k); l++) {
+				w.getWeights()[l] = _weights.get(side).getWeights()[l];
 			}
-			side = (side == i) ? j:i;
-			lastSpot = curCross;
+			side = (side == mom) ? dad:mom;
+			lastSpot = crossPoints.get(k);
 		}
 		
 		double transcriptionErrorProbability = 1.0/(EXPECTATION_OF_ERROR * w.getWeights().length);
-		for (int k=0;i!=w.getWeights().length;i++) {
+		for (int k=0;k!=w.getWeights().length;k++) {
 			if (Math.random() < transcriptionErrorProbability) {
 				w.getWeights()[k] = Math.random()*4.0 - 2.0;  // TODO:  Formalize the randomness
 			}

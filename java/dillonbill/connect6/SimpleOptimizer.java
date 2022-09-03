@@ -11,7 +11,7 @@ public class SimpleOptimizer {
 	  Board board = new Board (9,9);
 	  // The network is constructed here...
 	  BoardNN boardnn = new BoardNN(board);
-	  var gs = new GeneticSolver (20,boardnn._network);
+	  var gs = new GeneticSolver (24,boardnn._network);
 	  gs.optimize(board,10,"/Users/williamcochran/Code/dillon/Connect6Bot/data/another");
   }
 }

@@ -5,20 +5,41 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import dillonbill.connect6.game.Board;
+
 public abstract class EvaluateNode implements Node {
 	private double _accumulator;
 	private Weights _weights;
 	private List<Node> _downstream;
 	private List<Node> _upstream;
 	public static double NEUTRAL = 1.6;
+	private static int NEXT_ID = 0;
+	private int _id;
 	
 	public EvaluateNode() {
 		_downstream = new LinkedList<Node>();
 		_upstream = new LinkedList<Node>();
+		_id = NEXT_ID++;
 	}
 	
+	public int getID () {
+		return _id;
+	}
+		
 	public void setThreshold (double d) {
 		_weights.set(this, this, d);
+	}
+	
+	public void setBoard (Board b) {
+		
+	}
+	
+	protected void copyFrom (EvaluateNode input) {
+		_accumulator = input._accumulator;
+		_weights = input._weights;
+		_downstream = input._downstream;
+		_upstream = input._upstream;
+		_id = input._id;
 	}
 	
 	protected double getAccumulator() {
@@ -84,6 +105,11 @@ public abstract class EvaluateNode implements Node {
 	
 	public List<Node> getUpstreamNodes() {
 		return _upstream;
+	}
+	
+	public void clearConnections() {
+		_downstream = new LinkedList<Node>();
+		_upstream = new LinkedList<Node>();
 	}
 	
 	public double getValue() {

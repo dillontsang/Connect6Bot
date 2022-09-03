@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class Weights {
 	private double _weights[];
-	private Map<Node,Map<Node,Integer>> _weightMap;
+	private Map<Integer,Map<Integer,Integer>> _weightMap;
 
 	
 	public void writeWeights (DataOutputStream os) throws IOException {
@@ -27,7 +27,7 @@ public class Weights {
 		}
 	}
 	
-	public void setWeightMap (Map<Node,Map<Node,Integer>> m) {
+	public void setWeightMap (Map<Integer,Map<Integer,Integer>> m) {
 		_weightMap = m;
 	}
 	
@@ -51,29 +51,34 @@ public class Weights {
 	}
 	
 	public double get(Node upstreamNode, Node downstreamNode) {
-		int index = _weightMap.get(upstreamNode).get(downstreamNode);
+		int index = _weightMap.get(upstreamNode.getID()).get(downstreamNode.getID());
 		return _weights[index];
 		// return _weights[_weightMap.get(upstreamNode).get(downstreamNode)];
 	}
 	
 	public void set (Node upstreamNode, Node downstreamNode, double d) {
-		_weights[_weightMap.get(upstreamNode).get(downstreamNode)] = d;
+		_weights[_weightMap.get(upstreamNode.getID()).get(downstreamNode.getID())] = d;
 	}
 	
-	public void randomize(List<Node> nodes, double max) {
+	public void allocateWeights (List <Node> nodes) {
 		int totalSize = 0;
-	
+		
 		_weightMap = new HashMap<>();
 		for (Node n: nodes) {
-			Map<Node,Integer> weightMap = new HashMap<>();
-			weightMap.put(n,totalSize);
-			_weightMap.put(n,weightMap);
+			Map<Integer,Integer> weightMap = new HashMap<>();
+			weightMap.put(n.getID(),totalSize);
+			_weightMap.put(n.getID(),weightMap);
 			totalSize++;
 			for (Node m: n.getDownstreamNodes()) {
-				weightMap.put(m,totalSize++);
+				weightMap.put(m.getID(),totalSize++);
 			}
 		}
 		_weights = new double [totalSize];
+		
+	}
+	
+	public void randomize(List<Node> nodes, double max) {
+		allocateWeights(nodes);
 		randomize(max);
 	}
 	

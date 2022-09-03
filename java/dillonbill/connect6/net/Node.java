@@ -14,6 +14,8 @@ public interface Node {
 	public static int HIDDEN_TYPE = 1;
 	public static int OUTPUT_TYPE = 2;
 	
+	public Node cloneForThreads(Board b);
+	
 	public void evaluate();
 	
 	public void fire(double d);
@@ -35,6 +37,12 @@ public interface Node {
 	public List<Node> getUpstreamNodes();
 
 	public int getType();
+	
+	public void setBoard (Board b);
+	
+	public void clearConnections();
+	
+	public int getID();
 	
 	public void writeSpecific(DataOutputStream os) throws IOException;
 	

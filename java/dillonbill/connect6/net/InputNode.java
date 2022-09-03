@@ -17,6 +17,17 @@ public class InputNode extends EvaluateNode {
 		_col = is.readInt();
 	}
 	
+	public Node cloneForThreads(Board b) {
+		InputNode node = new InputNode(b,_row,_col);
+		node.copyFrom(this);
+		return node;
+	}
+	
+	public void setBoard (Board b) {
+		_board = b;
+	}
+	
+	
 	public InputNode(Board board, int r, int c) {
 		_board = board;
 		_row = r;
