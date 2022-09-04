@@ -24,7 +24,7 @@ public class GenePool {
 	private int _totalScore;
 	
 	public static int NUMBER_OF_CROSSES = 1;
-	public static int EXPECTATION_OF_ERROR = 1;
+	public static double EXPECTATION_OF_ERROR_PCT = 0.001;
 	
 	public GenePool (int count, Weights weightsToClone) {
 		_weights = new ArrayList<>(count);
@@ -164,9 +164,9 @@ public class GenePool {
 			lastSpot = crossPoints.get(k);
 		}
 		
-		double transcriptionErrorProbability = 1.0/(EXPECTATION_OF_ERROR * w.getWeights().length);
+
 		for (int k=0;k!=w.getWeights().length;k++) {
-			if (Math.random() < transcriptionErrorProbability) {
+			if (Math.random() < EXPECTATION_OF_ERROR_PCT) {
 				w.getWeights()[k] = Math.random()*4.0 - 2.0;  // TODO:  Formalize the randomness
 			}
 		}
