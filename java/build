@@ -1,0 +1,5 @@
+javac dillonbill/connect6/game/*.java
+javac dillonbill/connect6/genetic/*.java
+javac dillonbill/connect6/test/*.java
+javac dillonbill/connect6/net/*.java
+javac dillonbill/connect6/*.java

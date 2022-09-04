@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class Weights {
 	private double _weights[];
-	private Map<Node,Map<Node,Integer>> _weightMap;
+	private Map<Integer,Map<Integer,Integer>> _weightMap;
 
 	
 	public void writeWeights (DataOutputStream os) throws IOException {
@@ -26,33 +26,18 @@ public class Weights {
 			_weights[i] = os.readDouble();
 		}
 	}
-
-	public void writeWeightMap (DataOutputStream os, Map<Node,Integer> nodeMap) throws IOException {
-		os.writeInt(_weightMap.keySet().size());
-		for(Node n: _weightMap.keySet()) {
-			os.writeInt(nodeMap.get(n));
-			Map<Node,Integer> curRow = _weightMap.get(n);
-			os.writeInt(curRow.keySet().size());
-			for(Node m: curRow.keySet()) {
-				os.writeInt(nodeMap.get(n));
-				os.writeInt(curRow.get(m));
-			}
-		}
-	}
-
-	public void readWeightMap (DataInputStream is, Map<Integer,Node> nodeMap) throws IOException {
-		int numNodes = is.readInt();
-		for (int i = 0; i != numNodes; i++) {
-			Node n = nodeMap.get(is.readInt());
-			_weightMap.put(n,new HashMap<Node,Integer>());
-			int numCols = is.readInt();
-			for (int j = 0; j != numCols; j++) {
-				Node m = nodeMap.get(is.readInt());
-				_weightMap.get(n).put(m,is.readInt());
-			}
-		}
+	
+	public void setWeightMap (Map<Integer,Map<Integer,Integer>> m) {
+		_weightMap = m;
 	}
 	
+	public void checkForMap () {
+		if (_weightMap == null) {
+			throw new RuntimeException ("Somehow weightMap isn't there");
+		}
+	}
+
+
 	public Weights clone () {
 		Weights w = new Weights();
 		w._weights = new double[_weights.length];
@@ -66,29 +51,34 @@ public class Weights {
 	}
 	
 	public double get(Node upstreamNode, Node downstreamNode) {
-		int index = _weightMap.get(upstreamNode).get(downstreamNode);
+		int index = _weightMap.get(upstreamNode.getID()).get(downstreamNode.getID());
 		return _weights[index];
 		// return _weights[_weightMap.get(upstreamNode).get(downstreamNode)];
 	}
 	
 	public void set (Node upstreamNode, Node downstreamNode, double d) {
-		_weights[_weightMap.get(upstreamNode).get(downstreamNode)] = d;
+		_weights[_weightMap.get(upstreamNode.getID()).get(downstreamNode.getID())] = d;
 	}
 	
-	public void randomize(List<Node> nodes, double max) {
+	public void allocateWeights (List <Node> nodes) {
 		int totalSize = 0;
-	
+		
 		_weightMap = new HashMap<>();
 		for (Node n: nodes) {
-			Map<Node,Integer> weightMap = new HashMap<>();
-			weightMap.put(n,totalSize);
-			_weightMap.put(n,weightMap);
+			Map<Integer,Integer> weightMap = new HashMap<>();
+			weightMap.put(n.getID(),totalSize);
+			_weightMap.put(n.getID(),weightMap);
 			totalSize++;
 			for (Node m: n.getDownstreamNodes()) {
-				weightMap.put(m,totalSize++);
+				weightMap.put(m.getID(),totalSize++);
 			}
 		}
 		_weights = new double [totalSize];
+		
+	}
+	
+	public void randomize(List<Node> nodes, double max) {
+		allocateWeights(nodes);
 		randomize(max);
 	}
 	

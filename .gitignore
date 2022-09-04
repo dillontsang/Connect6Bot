@@ -1,2 +1,15 @@
 *.class
+*.swp
 .vscode*
+bin/
+.DS_Store/
+.classpath/
+.git/
+.project/
+java/build
+java/clean
+module-info.java
+java/.classpath
+java/.project
+data/
+.classpath

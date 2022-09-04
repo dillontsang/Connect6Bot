@@ -23,6 +23,17 @@ public class Move {
 		player = p;
 	}
 	
+	public Move (int r, int c, Connect6Game.Stone stone) {
+		this(r,c,stone.getValue());
+	}
+	
+	public void dup (Move m) {
+		col = m.col;
+		row = m.row;
+		player = m.player;
+		neighbors = m.neighbors;
+	}
+	
 	public void setCol(int c) {
 		col = c;
 	}

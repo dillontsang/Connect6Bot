@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import dillonbill.connect6.game.Board;
@@ -23,6 +24,26 @@ public class Network {
 	
 	List<Node> _nodes;
 	Weights _weights;
+	Map<Integer,Map<Integer,Integer>> _weightMap;
+	
+	public Network cloneForThreads (Board board) {
+		Network net = new Network ();
+		net._weightMap = _weightMap;
+		for (Node n: _nodes) {
+			net._nodes.add(n.cloneForThreads(board));
+		}
+		for (int i = 0 ; i != _nodes.size(); i++) {
+			for (Node n: _nodes.get(i).getUpstreamNodes()) {
+				for (Node m: net._nodes) {
+					if (m.getID() == n.getID()) {
+						net._nodes.get(i).addUpstreamNode(m);
+					}
+				}
+			}
+		}
+		net._weights = _weights;
+		return net;
+	}
 
 
 	public void writeNet(String filename) throws IOException {
@@ -35,6 +56,24 @@ public class Network {
 		    Node.writeNode(os, n, nodeToInteger);	
 		}
 	}
+	
+	public void buildWeightMap () {
+		var nodeMap = new HashMap<Integer,Map<Integer,Integer>> ();
+		int i = 0;
+		for (Node n: _nodes) {
+			var tmap = new HashMap<Integer,Integer>();
+			nodeMap.put(n.getID(), tmap);
+			tmap.put(n.getID(), i);
+			i++;
+			for (Node m: n.getDownstreamNodes()) {
+				tmap.put(m.getID(), i);
+				i++;
+			}
+		}
+		_weights = new Weights();
+		_weights.setWeightMap(nodeMap);
+		_weightMap = nodeMap;		
+	}
 
 	public void readNet(String filename, Board board) throws IOException {
 		DataInputStream is = new DataInputStream(new FileInputStream(filename));
@@ -44,9 +83,9 @@ public class Network {
 		for (int i = 0; i != num; i++) {
 			Node n = Node.readNode(is, board, integerToNode);
 			integerToNode.put(i,n);
-			_nodes.set(i,n);
+			_nodes.add(n);
 		}
-		buildNodeList(_nodes.get(0));
+		buildWeightMap();
 	}
 	
 	public void evaluateNetwork() {
@@ -62,6 +101,7 @@ public class Network {
 		Network retval = new Network();
 		retval._nodes = _nodes;
 		retval._weights = _weights.clone();
+		retval._weightMap = _weightMap;
 		return retval;
 	}
 	
@@ -76,6 +116,7 @@ public class Network {
 	public void buildNodeList (Node root) {
 		List<Node> _activeQueue = new LinkedList<Node> ();
 	    Set<Node> _coveredNodes = new HashSet<Node> ();
+	    _nodes = new LinkedList<> ();
 	    _weights = new Weights();
 	    _activeQueue.add(root);
 	    while (!_activeQueue.isEmpty()) {
@@ -86,7 +127,6 @@ public class Network {
 	        		if (!_coveredNodes.contains(n)) {
 	        			_activeQueue.add(0, n);
 	        			readyToProcess = false;
-	        			break;
 	        		}
 	        	}
 	        	if (readyToProcess) {
@@ -101,7 +141,7 @@ public class Network {
 	        	}
 	        }
 	    }
-	    
+	    buildWeightMap();
 	    _weights.randomize(_nodes, 5.0);
 	}
 	
@@ -109,8 +149,17 @@ public class Network {
 		return _weights;
 	}
 	
+	public void setWeights () {
+		setWeights(_weights);
+	}
+	
+	
 	public void setWeights(Weights weights) {
 		_weights = weights;
+		weights.setWeightMap(_weightMap);
+		for (Node n: _nodes) {
+			n.setWeights(weights);
+		}
 	}
 }
 

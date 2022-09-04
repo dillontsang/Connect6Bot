@@ -10,9 +10,19 @@ public class Board {
 	private char[][] grid;
 	// store last move made
 	private int lastCol = -1, lastRow = -1;
+	private Move _lastMove;
 	
 	public Board(int h, int w) {
 	    reset(h, w);
+	}
+	
+	public Board (Board b) {
+		reset (b.height,b.width);
+	}
+	
+	public Move getLast () {
+		if (_lastMove == null) throw new RuntimeException();
+		return _lastMove;
 	}
 	
 	public void reset(int h, int w) {
@@ -43,7 +53,7 @@ public class Board {
 			grid[m.getRow()][m.getCol()] = (char)48;
 		} else
 			grid[m.getRow()][m.getCol()] = (char)49;
-		
+		_lastMove = m;		
 	}
 	
 	public void unapplyMove(Move m) {

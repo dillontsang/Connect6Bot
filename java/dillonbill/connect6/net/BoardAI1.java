@@ -89,4 +89,10 @@ public class BoardAI1 implements BoardAI {
 		}
 		return value;
 	}
+
+	@Override
+	public int evaluate(Board b) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
  }

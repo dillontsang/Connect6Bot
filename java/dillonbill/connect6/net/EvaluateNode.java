@@ -1,7 +1,11 @@
 package dillonbill.connect6.net;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+
+import dillonbill.connect6.game.Board;
 
 public abstract class EvaluateNode implements Node {
 	private double _accumulator;
@@ -9,14 +13,25 @@ public abstract class EvaluateNode implements Node {
 	private List<Node> _downstream;
 	private List<Node> _upstream;
 	public static double NEUTRAL = 1.6;
+	private static int NEXT_ID = 0;
+	private int _id;
 	
 	public EvaluateNode() {
 		_downstream = new LinkedList<Node>();
 		_upstream = new LinkedList<Node>();
+		_id = NEXT_ID++;
 	}
 	
+	public int getID () {
+		return _id;
+	}
+		
 	public void setThreshold (double d) {
 		_weights.set(this, this, d);
+	}
+	
+	protected void copyFrom (EvaluateNode input) {
+		_id = input._id;
 	}
 	
 	protected double getAccumulator() {
@@ -48,6 +63,10 @@ public abstract class EvaluateNode implements Node {
 		_weights = weights;
 	}
 	
+	public void writeSpecific (DataOutputStream os) throws IOException {
+		
+	}
+	
 	public void addDownstreamNode(Node node) {
 		if(_downstream.contains(node)) {
 			return;
@@ -61,7 +80,14 @@ public abstract class EvaluateNode implements Node {
 		if(_upstream.contains(node)) {
 			return;
 		}
+		
 		_upstream.add(node);
+		 /* if(node.getDownstreamNodes().contains(this)) {
+			return;
+		}
+		node.addDownstreamNode(this); */
+		
+		//_upstream.add(node);
 		node.addDownstreamNode(this);
 	}
 	
@@ -73,6 +99,11 @@ public abstract class EvaluateNode implements Node {
 		return _upstream;
 	}
 	
+	public void clearConnections() {
+		_downstream = new LinkedList<Node>();
+		_upstream = new LinkedList<Node>();
+	}
+	
 	public double getValue() {
 		// TODO Auto-generated method stub	
 		return squash(getAccumulator());
@@ -80,6 +111,6 @@ public abstract class EvaluateNode implements Node {
 	}
 	
 	public static double squash(double d) {
-		return Math.atan(d) + NEUTRAL;
+		return Math.atan(d);
 	}
 }

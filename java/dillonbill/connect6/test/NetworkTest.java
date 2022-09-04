@@ -1,5 +1,6 @@
 package dillonbill.connect6.test;
 
+
 import dillonbill.connect6.game.Board;
 import dillonbill.connect6.game.Move;
 import dillonbill.connect6.net.InputNode;
